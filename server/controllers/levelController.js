@@ -2,6 +2,7 @@ import Question          from '../models/Question.js'
 import LevelProgress     from '../models/LevelProgress.js'
 import UserSubjectProgress from '../models/UserSubjectProgress.js'
 import User              from '../models/User.js'
+import XPHistory         from '../models/XPHistory.js'
 
 // ── Level metadata per subject ──────────────────────────────────────
 const DSA_LEVEL_META = [
@@ -196,19 +197,37 @@ async function _awardAndAdvance(userId, subjectSlug, lvlNum, meta, progress) {
   const xpReward   = meta.xpReward  || 10
   const coinReward = meta.coinReward || 0
 
+  // Guard: only award XP/coins and increment counters the FIRST time this level is passed
+  const alreadyPassed = progress.passed
+
   progress.passed       = true
   progress.phase        = 'complete'
   progress.xpAwarded    = xpReward
   progress.coinsAwarded = coinReward
-  progress.completedAt  = new Date()
+  progress.completedAt  = progress.completedAt || new Date()
 
-  await User.findByIdAndUpdate(userId, { $inc: { xp: xpReward, coins: coinReward } })
-
-  await UserSubjectProgress.findOneAndUpdate(
-    { user: userId, subjectSlug },
-    { $inc: { xpEarned: xpReward, levelsCompleted: 1 }, $max: { level: lvlNum + 1 } },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  )
+  if (!alreadyPassed) {
+    await User.findByIdAndUpdate(userId, { $inc: { xp: xpReward, coins: coinReward } })
+    await UserSubjectProgress.findOneAndUpdate(
+      { user: userId, subjectSlug },
+      { $inc: { xpEarned: xpReward, levelsCompleted: 1 }, $max: { level: lvlNum + 1 } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    )
+    // Record XP event so the XP Activity graph on the Progress page shows level completions
+    await XPHistory.create({
+      user:     userId,
+      amount:   xpReward,
+      event:    `level_complete:${subjectSlug}:${lvlNum}`,
+      earnedAt: new Date(),
+    }).catch(() => {}) // non-critical — never block level completion
+  } else {
+    // Already passed — just keep the subject level pointer up to date (idempotent)
+    await UserSubjectProgress.findOneAndUpdate(
+      { user: userId, subjectSlug },
+      { $max: { level: lvlNum + 1 } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    )
+  }
 }
 
 // ── POST /api/levels/seed  — idempotent DSA demo seed ─────────────────

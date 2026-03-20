@@ -48,9 +48,10 @@ export const LEVEL_1 = {
 
   contentTest: [
     { id: 'ct_1', text: 'What is the time complexity for accessing an element in an array by index?', options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'], correctIndex: 2, explanation: 'Arrays store elements contiguously so address = base + i×size — computed in O(1).' },
-    { id: 'ct_2', text: 'Which best describes how arrays store data in memory?', options: ['Scattered across random addresses', 'In contiguous (adjacent) memory locations', 'In a tree structure', 'In doubly linked nodes'], correctIndex: 1, explanation: 'Arrays use contiguous memory, which enables O(1) access.' },
-    { id: 'ct_3', text: 'What is the time complexity of inserting an element in the middle of an array?', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correctIndex: 2, explanation: 'Inserting in the middle requires shifting all subsequent elements.' },
-    { id: 'ct_4', text: 'How is the memory address of arr[i] calculated?', options: ['base + i', 'base × i', 'base + (i × element_size)', 'base - (i × element_size)'], correctIndex: 2, explanation: 'The formula is base + (index × element_size).' },
+    { id: 'ct_2', text: 'What is the time complexity of deleting the first element of an array (elements must shift)?', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correctIndex: 2, explanation: 'Every subsequent element must shift left by one position — O(n).' },
+    { id: 'ct_3', text: 'An integer array starts at address 0x200; each integer is 4 bytes. What is the address of index 3?', options: ['0x203', '0x20B', '0x20C', '0x210'], correctIndex: 2, explanation: '0x200 + 3×4 = 0x200 + 12 = 0x20C.' },
+    { id: 'ct_4', text: 'Which of the following array operations is NOT O(1)?', options: ['Read element at index 5', 'Update element at index 2', 'Insert at the middle', 'Read the last element'], correctIndex: 2, explanation: 'Inserting in the middle requires shifting all elements after it — O(n).' },
+    { id: 'ct_5', text: 'Why do arrays offer O(1) random access?', options: ['Elements are sorted enabling binary search', 'A hash table maps each index', 'Address = base + index × element_size', 'The OS caches the first element'], correctIndex: 2, explanation: 'Contiguous storage lets CPU calculate any address with one arithmetic operation.' },
   ],
 
   cumulativeQuiz: [],
@@ -94,7 +95,8 @@ export const LEVEL_2 = {
     { id: 'ct_1', text: 'What is the time complexity of inserting a node at the HEAD of a singly linked list?', options: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'], correctIndex: 2, explanation: 'Prepending only updates the head pointer — constant time.' },
     { id: 'ct_2', text: 'What is the time complexity of accessing the k-th node in a singly linked list?', options: ['O(1)', 'O(k)', 'O(log k)', 'O(n log n)'], correctIndex: 1, explanation: 'No direct index access — you must traverse k nodes from head.' },
     { id: 'ct_3', text: 'What does each node in a singly linked list store?', options: ['Only its data value', 'Data and a pointer to the NEXT node', 'Data and pointers to NEXT and PREV', 'Only a pointer to next'], correctIndex: 1, explanation: 'Singly linked list node stores its value and a single next pointer.' },
-    { id: 'ct_4', text: 'What is the main advantage of linked lists over arrays for frequent mid-list insertions?', options: ['O(1) random access', 'Less memory per element', 'No shifting of elements required', 'Better CPU cache performance'], correctIndex: 2, explanation: 'Linked list insertion only rewires pointers — no element shifting needed.' },
+    { id: 'ct_4', text: 'Which linked list operation requires O(n) time (singly linked, no tail pointer)?', options: ['Insert at head', 'Delete head node', 'Find and reach the tail node', 'Read head value'], correctIndex: 2, explanation: 'Without a tail pointer you must traverse all n nodes to find the end.' },
+    { id: 'ct_5', text: 'What is the main advantage of a linked list over an array for frequent mid-list insertions?', options: ['O(1) random access', 'Less memory per element', 'No shifting of elements required', 'Better CPU cache performance'], correctIndex: 2, explanation: 'Linked list insertion only rewires pointers — no element shifting needed.' },
   ],
 
   cumulativeQuiz: [
