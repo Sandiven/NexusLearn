@@ -239,7 +239,7 @@ export default function LeaderboardPage() {
                       <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                     </svg>
                     <span style={{ fontFamily: '"DM Sans", sans-serif', fontSize: '0.72rem', color: '#00F5FF', fontWeight: 600 }}>
-                      Updates daily at 00:00 UTC
+                      Updates daily at 00:00 IST
                     </span>
                   </div>
                 </div>
